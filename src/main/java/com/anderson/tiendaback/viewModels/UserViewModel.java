@@ -2,6 +2,8 @@ package com.anderson.tiendaback.viewModels;
 
 import java.util.UUID;
 
+
+
 public class UserViewModel {
 
 	private UUID userId;
