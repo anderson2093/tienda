@@ -4,7 +4,6 @@ package com.anderson.tiendaback.models;
 
 import java.util.UUID;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.*;
