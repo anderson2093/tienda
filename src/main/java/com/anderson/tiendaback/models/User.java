@@ -2,8 +2,11 @@ package com.anderson.tiendaback.models;
 
 
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.*;
@@ -18,7 +21,7 @@ import jakarta.persistence.*;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(unique = true)
+    @Column(unique = true,name = "userId")
     private UUID userId=UUID.randomUUID();
 ;
 
@@ -33,7 +36,11 @@ public class User {
     @Nonnull
     private String password;
 
+    @OneToMany(fetch = FetchType.LAZY,mappedBy = "user",cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Order>orders;
     public User() {
+    	orders = new ArrayList<Order>();
     }
 
     public User(UUID userId, @Nonnull String username, @Nonnull String email, @Nonnull String password) {
@@ -90,5 +97,13 @@ public class User {
                 '}';
     }
 
+	public List<Order> getOrders() {
+		return orders;
+	}
 
+	public void setOrders(List<Order> orders) {
+		this.orders = orders;
+	}
+
+    
 }
