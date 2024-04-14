@@ -55,7 +55,7 @@ public class CategoryController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<Category>createFabric(@RequestBody CategoryViewModel categoryViewModel, BindingResult bindingResult){
+	public ResponseEntity<Category>createCategory(@RequestBody CategoryViewModel categoryViewModel, BindingResult bindingResult){
 		if(bindingResult.hasErrors()) {
 			throw new ValidationException();
 		}
@@ -64,7 +64,7 @@ public class CategoryController {
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<Category>updateFabric(@PathVariable UUID id,@RequestBody CategoryViewModel categoryViewModel){
+	public ResponseEntity<Category>updateCategory(@PathVariable UUID id,@RequestBody CategoryViewModel categoryViewModel){
 		if(!categoryService.getOne(id).isPresent()) {
         	new ResourceNotFoundException("Category not found with id " + id);
 		}

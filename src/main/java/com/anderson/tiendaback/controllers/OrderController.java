@@ -54,7 +54,7 @@ public class OrderController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<Order>createFabric(@RequestBody OrderViewModel orderViewModel, BindingResult bindingResult){
+	public ResponseEntity<Order>createOrder(@RequestBody OrderViewModel orderViewModel, BindingResult bindingResult){
 		if(bindingResult.hasErrors()) {
 			throw new ValidationException();
 		}
@@ -63,7 +63,7 @@ public class OrderController {
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<Order>updateFabric(@PathVariable UUID id,@RequestBody OrderViewModel orderViewModel){
+	public ResponseEntity<Order>updateOrder(@PathVariable UUID id,@RequestBody OrderViewModel orderViewModel){
 		if(!orderService.getOne(id).isPresent()) {
         	new ResourceNotFoundException("Order not found with id " + id);
 		}

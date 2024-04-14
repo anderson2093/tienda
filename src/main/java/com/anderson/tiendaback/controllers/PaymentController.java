@@ -55,7 +55,7 @@ public class PaymentController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<Payment>createFabric(@RequestBody PaymentViewModel paymentViewModel, BindingResult bindingResult){
+	public ResponseEntity<Payment>createPayment(@RequestBody PaymentViewModel paymentViewModel, BindingResult bindingResult){
 		if(bindingResult.hasErrors()) {
 			throw new ValidationException();
 		}
@@ -64,7 +64,7 @@ public class PaymentController {
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<Payment>updateFabric(@PathVariable UUID id,@RequestBody PaymentViewModel paymentViewModel){
+	public ResponseEntity<Payment>updatePayment(@PathVariable UUID id,@RequestBody PaymentViewModel paymentViewModel){
 		if(!paymentService.getOne(id).isPresent()) {
         	new ResourceNotFoundException("Payment not found with id " + id);
 		}

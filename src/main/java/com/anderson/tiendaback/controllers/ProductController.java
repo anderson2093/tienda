@@ -57,7 +57,7 @@ public class ProductController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<Product>createFabric(@RequestBody ProductViewModel productViewModel, BindingResult bindingResult){
+	public ResponseEntity<Product>createProduct(@RequestBody ProductViewModel productViewModel, BindingResult bindingResult){
 		if(bindingResult.hasErrors()) {
 			throw new ValidationException();
 		}
@@ -66,7 +66,7 @@ public class ProductController {
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<Product>updateFabric(@PathVariable UUID id,@RequestBody ProductViewModel productViewModel){
+	public ResponseEntity<Product>updateProduct(@PathVariable UUID id,@RequestBody ProductViewModel productViewModel){
 		if(!productService.getOne(id).isPresent()) {
         	new ResourceNotFoundException("Product not found with id " + id);
 		}
