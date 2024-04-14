@@ -6,6 +6,9 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.anderson.tiendaback.models.Category;
@@ -33,7 +36,8 @@ public class CategoryServiceImpl implements CategoryService{
 	@Override
 	public List<Category> getAll(int page, int size, String sortDir, String sort) {
 		// TODO Auto-generated method stub
-		return null;
+		PageRequest pageReq = PageRequest.of(page, size,Sort.Direction.fromString(sortDir),sort);
+		return categoryRepository.findAll(pageReq).getContent();
 	}
 
 	@Override
@@ -45,7 +49,11 @@ public class CategoryServiceImpl implements CategoryService{
 	@Override
 	public Page<Category> findPaginated(int pageNo, int pageSize, String sortField, String sortDir) {
 		// TODO Auto-generated method stub
-		return null;
+		Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() :
+			Sort.by(sortField).descending();
+		
+		Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
+		return categoryRepository.findAll(pageable);
 	}
 
 }
