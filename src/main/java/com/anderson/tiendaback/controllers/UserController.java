@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.anderson.tiendaback.models.User;
@@ -17,6 +18,7 @@ import com.anderson.tiendaback.services.UserService;
 
 
 @RestController
+@RequestMapping("/api/auth")
 public class UserController {
 	
 	@Autowired
@@ -29,7 +31,7 @@ public class UserController {
                             schema = @Schema(implementation = User.class))}),
             @ApiResponse(responseCode = "404", description = "Error in register",
                     content = @Content)})
-    @PostMapping("/api/auth/register")
+    @PostMapping("/register")
     public User register(@RequestBody User user) {
     	return userService.register(user);
     }
