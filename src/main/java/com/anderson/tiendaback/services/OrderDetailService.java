@@ -1,5 +1,7 @@
 package com.anderson.tiendaback.services;
 
-public interface OrderDetailService extends CRUDService<OrderDetailService>{
+import com.anderson.tiendaback.models.OrderDetail;
+
+public interface OrderDetailService extends CRUDService<OrderDetail>{
 
 }
