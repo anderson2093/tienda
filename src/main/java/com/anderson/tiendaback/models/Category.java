@@ -29,7 +29,6 @@ public class Category {
 	private UUID categoryId = UUID.randomUUID();
 	
 	@NotNull
-	@UniqueElements
 	private String nameCategory;
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "category", cascade = CascadeType.ALL)

@@ -12,7 +12,6 @@ public class CategoryViewModel {
 	private UUID categoryId;
 	
 	@NotNull
-	@UniqueElements
 	private String nameCategory;
 
 	public UUID getCategoryId() {
