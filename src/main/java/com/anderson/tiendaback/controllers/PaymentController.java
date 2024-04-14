@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.anderson.tiendaback.Mapper;
 import com.anderson.tiendaback.exception.ResourceNotFoundException;
@@ -25,6 +27,8 @@ import com.anderson.tiendaback.viewModels.PaymentViewModel;
 
 import jakarta.validation.ValidationException;
 
+@RestController
+@RequestMapping("/api/payments")
 public class PaymentController {
 
 	@Autowired
