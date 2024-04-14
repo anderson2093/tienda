@@ -6,7 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,6 +19,7 @@ import com.anderson.tiendaback.services.UserService;
 @RestController
 public class UserController {
 	
+	@Autowired
     private UserService userService;
 
     @Operation(summary = "Register User")
@@ -30,7 +31,6 @@ public class UserController {
                     content = @Content)})
     @PostMapping("/api/auth/register")
     public User register(@RequestBody User user) {
-    	System.out.println("Contraseña: "+user.getPassword());
     	return userService.register(user);
     }
 }
