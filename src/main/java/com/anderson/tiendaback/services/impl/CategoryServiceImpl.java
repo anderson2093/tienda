@@ -15,6 +15,8 @@ import com.anderson.tiendaback.models.Category;
 import com.anderson.tiendaback.repositories.CategoryRepository;
 import com.anderson.tiendaback.services.CategoryService;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class CategoryServiceImpl implements CategoryService{
 
@@ -22,6 +24,7 @@ public class CategoryServiceImpl implements CategoryService{
 	private CategoryRepository categoryRepository;
 	
 	@Override
+    @Transactional
 	public Category insertOrUpdate(Category entity) {
 		// TODO Auto-generated method stub
 		return categoryRepository.save(entity);
@@ -41,6 +44,7 @@ public class CategoryServiceImpl implements CategoryService{
 	}
 
 	@Override
+    @Transactional
 	public void delete(UUID id) {
 		// TODO Auto-generated method stub
 		categoryRepository.deleteById(id);
