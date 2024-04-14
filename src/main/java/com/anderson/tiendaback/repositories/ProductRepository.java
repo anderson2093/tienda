@@ -1,15 +1,13 @@
 package com.anderson.tiendaback.repositories;
 
-
-import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.anderson.tiendaback.models.User;
+import com.anderson.tiendaback.models.Product;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, UUID> {
-    Optional<User> findByUsername(String username);
+public interface ProductRepository extends JpaRepository<Product, UUID>{
+
 }

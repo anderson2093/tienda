@@ -6,6 +6,7 @@ import java.util.UUID;
 import jakarta.validation.constraints.NotNull;
 
 public class OrderDetailViewModel {
+	private UUID orderDetailId;
 
 	private UUID orderId;
 	
@@ -58,6 +59,14 @@ public class OrderDetailViewModel {
 
 	public void setTotal(Double total) {
 		this.total = total;
+	}
+
+	public UUID getOrderDetailId() {
+		return orderDetailId;
+	}
+
+	public void setOrderDetailId(UUID orderDetailId) {
+		this.orderDetailId = orderDetailId;
 	}
 	
 	
