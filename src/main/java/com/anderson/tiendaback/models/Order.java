@@ -1,17 +1,17 @@
 package com.anderson.tiendaback.models;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
@@ -32,24 +32,26 @@ public class Order {
 	@ManyToOne
 	private User user;
 	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "order", cascade = CascadeType.ALL)
-	@JsonIgnore
+
+    @OneToMany(mappedBy = "order")
 	private List<OrderDetail>orderDetails;
 	
 	@OneToOne
+	@JsonIgnore
 	private Payment payment;
 
 	public Order() {
 		super();
 		// TODO Auto-generated constructor stub
+		payment = new Payment();
+		orderDetails = new ArrayList<>();
 	}
 
-	public Order(UUID orderId, @NotNull Double mount, @NotNull User user, Payment payment) {
+	public Order(UUID orderId, @NotNull Double mount, @NotNull User user) {
 		super();
 		this.orderId = orderId;
 		this.mount = mount;
 		this.user = user;
-		this.payment = payment;
 	}
 
 	public UUID getOrderId() {
@@ -76,13 +78,7 @@ public class Order {
 		this.user = user;
 	}
 
-	public List<OrderDetail> getOrderDetails() {
-		return orderDetails;
-	}
 
-	public void setOrderDetails(List<OrderDetail> orderDetails) {
-		this.orderDetails = orderDetails;
-	}
 
 	public Payment getPayment() {
 		return payment;
@@ -91,6 +87,15 @@ public class Order {
 	public void setPayment(Payment payment) {
 		this.payment = payment;
 	}
-	
+
+	public List<OrderDetail> getOrderDetails() {
+		return orderDetails;
+	}
+
+	public void setOrderDetails(List<OrderDetail> orderDetails) {
+		this.orderDetails = orderDetails;
+	}
+
+
 	
 }

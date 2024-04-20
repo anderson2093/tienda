@@ -20,7 +20,7 @@ public class OrderDetailServiceImpl implements OrderDetailService{
 
 	@Autowired
 	private OrderDetailRepository orderDetailRepository;
-
+	
 	@Override
 	public OrderDetail insertOrUpdate(OrderDetail entity) {
 		// TODO Auto-generated method stub
@@ -55,7 +55,5 @@ public class OrderDetailServiceImpl implements OrderDetailService{
 		Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
 		return orderDetailRepository.findAll(pageable);
 	}
-
-	
 
 }

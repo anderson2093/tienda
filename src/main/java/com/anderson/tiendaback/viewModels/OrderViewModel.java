@@ -11,7 +11,6 @@ public class OrderViewModel {
 	@NotNull
 	private Double mount;
 	
-	private UUID paymentId;
 	
 	private UUID userId;
 
@@ -31,13 +30,6 @@ public class OrderViewModel {
 		this.mount = mount;
 	}
 
-	public UUID getPaymentId() {
-		return paymentId;
-	}
-
-	public void setPaymentId(UUID paymentId) {
-		this.paymentId = paymentId;
-	}
 
 	public UUID getUserId() {
 		return userId;

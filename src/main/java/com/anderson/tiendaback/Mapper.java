@@ -89,14 +89,12 @@ public class Mapper {
 		viewModel.setOrderId(entity.getOrderId());
 		viewModel.setMount(entity.getMount());
 		viewModel.setUserId(entity.getUser().getUserId());
-		viewModel.setPaymentId(entity.getPayment().getPaymentId());
 		return viewModel;
 	}
 	
 	public Order convertToOrderEntity(OrderViewModel viewModel) {
-		Payment payment = this.paymentRepository.findById(viewModel.getPaymentId()).get();
 		User user = this.userRepository.findById(viewModel.getUserId()).get();
-		Order order = new Order(viewModel.getOrderId(),viewModel.getMount(),user,payment);
+		Order order = new Order(viewModel.getOrderId(),viewModel.getMount(),user);
 		return order;
 	}
 	
@@ -119,19 +117,17 @@ public class Mapper {
 	public OrderDetailViewModel convertToOrderDetailViewModel(OrderDetail entity) {
 		OrderDetailViewModel viewModel = new OrderDetailViewModel();
 		viewModel.setOrderDetailId(entity.getOrderDetailId());
-		viewModel.setQuantityProduct(entity.getQuantityProduct());
-		viewModel.setTotal(entity.getTotal());
-		viewModel.setPriceProduct(entity.getPriceProduct());
 		viewModel.setOrderId(entity.getOrder().getOrderId());
 		viewModel.setProductId(entity.getProduct().getProductId());
+		viewModel.setPrice(entity.getPrice());
+		viewModel.setQuantity(entity.getQuantity());
 		return viewModel;
 	}
 	
 	public OrderDetail convertToOrderDetailEntity(OrderDetailViewModel viewModel) {
 		Order order = this.orderRepository.findById(viewModel.getOrderId()).get();
 		Product product = this.productRepository.findById(viewModel.getProductId()).get();
-		OrderDetail orderDetail = new OrderDetail(viewModel.getOrderDetailId(),viewModel.getPriceProduct(),viewModel.getQuantityProduct(),
-				viewModel.getTotal(),product,order);
+		OrderDetail orderDetail = new OrderDetail(viewModel.getOrderDetailId(),order,product,viewModel.getQuantity(),viewModel.getPrice());
 		return orderDetail;
 	}
 }

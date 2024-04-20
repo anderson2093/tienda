@@ -1,5 +1,7 @@
 package com.anderson.tiendaback.models;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 
@@ -9,6 +11,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 
@@ -32,9 +35,13 @@ public class Product {
     @ManyToOne
     private Category category;
     
+    @OneToMany(mappedBy = "product")
+    private List<OrderDetail> orderDetails;
+	
 	public Product() {
 		super();
 		// TODO Auto-generated constructor stub
+		orderDetails = new ArrayList<>();
 	}
 
 	public Product(UUID productId, @NotNull String nameProduct, @NotNull String descriptionProduct,
@@ -86,7 +93,15 @@ public class Product {
 	public void setCategory(Category category) {
 		this.category = category;
 	}
-	
+
+	public List<OrderDetail> getOrderDetails() {
+		return orderDetails;
+	}
+
+	public void setOrderDetails(List<OrderDetail> orderDetails) {
+		this.orderDetails = orderDetails;
+	}
+
 	
     
 }

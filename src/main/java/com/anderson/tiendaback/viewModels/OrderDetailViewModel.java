@@ -2,24 +2,30 @@ package com.anderson.tiendaback.viewModels;
 
 import java.util.UUID;
 
+import com.anderson.tiendaback.models.Product;
 
-import jakarta.validation.constraints.NotNull;
 
 public class OrderDetailViewModel {
-	private UUID orderDetailId;
 
-	private UUID orderId;
+	private UUID orderDetailId;
 	
-	private UUID productId;
-	
-	@NotNull
-	private Double priceProduct;
-	
-	@NotNull
-	private Integer quantityProduct;
-	
-	@NotNull
-	private Double total;
+
+    private UUID orderId;
+    
+
+    private UUID productId;
+    
+    private Integer quantity;
+    
+    private Double price;
+
+	public UUID getOrderDetailId() {
+		return orderDetailId;
+	}
+
+	public void setOrderDetailId(UUID orderDetailId) {
+		this.orderDetailId = orderDetailId;
+	}
 
 	public UUID getOrderId() {
 		return orderId;
@@ -29,6 +35,8 @@ public class OrderDetailViewModel {
 		this.orderId = orderId;
 	}
 
+	
+
 	public UUID getProductId() {
 		return productId;
 	}
@@ -37,37 +45,23 @@ public class OrderDetailViewModel {
 		this.productId = productId;
 	}
 
-	public Double getPriceProduct() {
-		return priceProduct;
+	public Integer getQuantity() {
+		return quantity;
 	}
 
-	public void setPriceProduct(Double priceProduct) {
-		this.priceProduct = priceProduct;
+	public void setQuantity(Integer quantity) {
+		this.quantity = quantity;
 	}
 
-	public Integer getQuantityProduct() {
-		return quantityProduct;
+	public Double getPrice() {
+		return price;
 	}
 
-	public void setQuantityProduct(Integer quantityProduct) {
-		this.quantityProduct = quantityProduct;
+	public void setPrice(Double price) {
+		this.price = price;
 	}
-
-	public Double getTotal() {
-		return total;
-	}
-
-	public void setTotal(Double total) {
-		this.total = total;
-	}
-
-	public UUID getOrderDetailId() {
-		return orderDetailId;
-	}
-
-	public void setOrderDetailId(UUID orderDetailId) {
-		this.orderDetailId = orderDetailId;
-	}
-	
-	
+    
+    
 }
+
+
