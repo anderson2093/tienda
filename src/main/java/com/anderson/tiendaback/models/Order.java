@@ -2,7 +2,6 @@ package com.anderson.tiendaback.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.util.List;
@@ -21,7 +20,7 @@ public class Order {
 	@EqualsAndHashCode.Include
 	private UUID orderId=UUID.randomUUID();
 
-	@Column(nullable = true,length =50)
+	@Column(length =50)
 	private Double mount;
 	
 	@ManyToOne
