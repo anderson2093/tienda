@@ -2,108 +2,50 @@ package com.anderson.tiendaback.models;
 
 
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import jakarta.annotation.Nonnull;
 import jakarta.persistence.*;
+import lombok.*;
 
 
-
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
 @Entity
-@Table(name = "users", uniqueConstraints = {
-        @UniqueConstraint(columnNames = "user_name"),
-        @UniqueConstraint(columnNames = "email")
-})
+@Table(name = "users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(unique = true,name = "userId")
     private UUID userId=UUID.randomUUID();
-;
 
-    @Column(name = "user_name", unique = true)
-    @Nonnull
+    @Column(nullable = false, length = 60, unique = true)
     private String username;
 
-    @Nonnull
-    @Column(name = "email", unique = true)
-    private String email;
 
-    @Nonnull
+    @Column(nullable = false, length = 60)
     private String password;
 
-    @OneToMany(fetch = FetchType.LAZY,mappedBy = "user",cascade = CascadeType.ALL)
+    @Column(nullable = false)
+    private boolean enabled;
+
+    @OneToMany(fetch = FetchType.EAGER,mappedBy = "user",cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Order>orders;
-    public User() {
-    	orders = new ArrayList<Order>();
-    }
 
-    public User(UUID userId, @Nonnull String username, @Nonnull String email, @Nonnull String password) {
-        this.userId = userId;
-        this.username = username;
-        this.email = email;
-        this.password = password;
-    }
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "user_role",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "userId"),
+            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "roleId"))
+    private List<Role> roles;
 
 
-    public UUID getUserId() {
-        return userId;
-    }
 
-    public void setUserId(UUID userId) {
-        this.userId = userId;
-    }
-
-    @Nonnull
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(@Nonnull String username) {
-        this.username = username;
-    }
-
-    @Nonnull
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(@Nonnull String email) {
-        this.email = email;
-    }
-
-    @Nonnull
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(@Nonnull String password) {
-        this.password = password;
-    }
-
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "userId='" + userId + '\'' +
-                ", username='" + username + '\'' +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                '}';
-    }
-
-	public List<Order> getOrders() {
-		return orders;
-	}
-
-	public void setOrders(List<Order> orders) {
-		this.orders = orders;
-	}
 
     
 }
