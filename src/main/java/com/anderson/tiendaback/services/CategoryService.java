@@ -2,6 +2,8 @@ package com.anderson.tiendaback.services;
 
 import com.anderson.tiendaback.models.Category;
 
-public interface CategoryService extends CRUDService<Category>{
+import java.util.UUID;
+
+public interface CategoryService extends ICRUDService<Category, UUID> {
 
 }

@@ -2,6 +2,8 @@ package com.anderson.tiendaback.services;
 
 import com.anderson.tiendaback.models.Payment;
 
-public interface PaymentService extends CRUDService<Payment>{
+import java.util.UUID;
+
+public interface PaymentService extends ICRUDService<Payment, UUID> {
 
 }

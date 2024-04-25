@@ -2,6 +2,8 @@ package com.anderson.tiendaback.services;
 
 import com.anderson.tiendaback.models.Product;
 
-public interface ProductService extends CRUDService<Product>{
+import java.util.UUID;
+
+public interface ProductService extends ICRUDService<Product, UUID> {
 
 }

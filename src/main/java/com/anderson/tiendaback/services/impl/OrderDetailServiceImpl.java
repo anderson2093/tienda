@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import com.anderson.tiendaback.repositories.IGenericRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,44 +17,14 @@ import com.anderson.tiendaback.repositories.OrderDetailRepository;
 import com.anderson.tiendaback.services.OrderDetailService;
 
 @Service
-public class OrderDetailServiceImpl implements OrderDetailService{
+public class OrderDetailServiceImpl extends CRUDImpl<OrderDetail,UUID> implements OrderDetailService{
 
 	@Autowired
 	private OrderDetailRepository orderDetailRepository;
-	
-	@Override
-	public OrderDetail insertOrUpdate(OrderDetail entity) {
-		// TODO Auto-generated method stub
-		return orderDetailRepository.save(entity);
-	}
+
 
 	@Override
-	public Optional<OrderDetail> getOne(UUID id) {
-		// TODO Auto-generated method stub
-		return orderDetailRepository.findById(id);
+	protected IGenericRepo<OrderDetail, UUID> getRepo() {
+		return orderDetailRepository;
 	}
-
-	@Override
-	public List<OrderDetail> getAll(int page, int size, String sortDir, String sort) {
-		// TODO Auto-generated method stub
-		PageRequest pageReq = PageRequest.of(page, size,Sort.Direction.fromString(sortDir),sort);
-		return orderDetailRepository.findAll(pageReq).getContent();
-	}
-
-	@Override
-	public void delete(UUID id) {
-		// TODO Auto-generated method stub
-		orderDetailRepository.deleteById(id);
-	}
-
-	@Override
-	public Page<OrderDetail> findPaginated(int pageNo, int pageSize, String sortField, String sortDir) {
-		// TODO Auto-generated method stub
-		Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() :
-			Sort.by(sortField).descending();
-		
-		Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
-		return orderDetailRepository.findAll(pageable);
-	}
-
 }
