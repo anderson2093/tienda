@@ -21,11 +21,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 
-import com.anderson.tiendaback.Mapper;
 import com.anderson.tiendaback.exception.ResourceNotFoundException;
 import com.anderson.tiendaback.models.Product;
 import com.anderson.tiendaback.services.ProductService;
-import com.anderson.tiendaback.viewModels.ProductViewModel;
+import com.anderson.tiendaback.dto.ProductDTO;
 
 import jakarta.validation.ValidationException;
 
@@ -57,7 +56,7 @@ public class ProductController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<Product>createProduct(@RequestBody ProductViewModel productViewModel, BindingResult bindingResult){
+	public ResponseEntity<Product>createProduct(@RequestBody ProductDTO productViewModel, BindingResult bindingResult){
 		if(bindingResult.hasErrors()) {
 			throw new ValidationException();
 		}
@@ -66,7 +65,7 @@ public class ProductController {
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<Product>updateProduct(@PathVariable UUID id,@RequestBody ProductViewModel productViewModel){
+	public ResponseEntity<Product>updateProduct(@PathVariable UUID id,@RequestBody ProductDTO productViewModel){
 		if(!productService.getOne(id).isPresent()) {
         	new ResourceNotFoundException("Product not found with id " + id);
 		}

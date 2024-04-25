@@ -1,6 +1,5 @@
 package com.anderson.tiendaback.models;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -14,7 +13,15 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name ="products" )
 public class Product {
@@ -22,14 +29,15 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(unique = true,name = "productId")
     private UUID productId=UUID.randomUUID();
-    
-    @NotNull
+
+	@Column(nullable = false,length =50)
     private String nameProduct;
     
-    @NotNull
-    private String descriptionProduct;
-    
-    @NotNull
+
+	@Column(nullable = false,length =100)
+	private String descriptionProduct;
+
+	@Column(nullable = false,length =50)
     private Double priceProduct;
 
     @ManyToOne
@@ -37,71 +45,5 @@ public class Product {
     
     @OneToMany(mappedBy = "product")
     private List<OrderDetail> orderDetails;
-	
-	public Product() {
-		super();
-		// TODO Auto-generated constructor stub
-		orderDetails = new ArrayList<>();
-	}
 
-	public Product(UUID productId, @NotNull String nameProduct, @NotNull String descriptionProduct,
-			@NotNull Double priceProduct, Category category) {
-		super();
-		this.productId = productId;
-		this.nameProduct = nameProduct;
-		this.descriptionProduct = descriptionProduct;
-		this.priceProduct = priceProduct;
-		this.category = category;
-	}
-
-	public UUID getProductId() {
-		return productId;
-	}
-
-	public void setProductId(UUID productId) {
-		this.productId = productId;
-	}
-
-	public String getNameProduct() {
-		return nameProduct;
-	}
-
-	public void setNameProduct(String nameProduct) {
-		this.nameProduct = nameProduct;
-	}
-
-	public String getDescriptionProduct() {
-		return descriptionProduct;
-	}
-
-	public void setDescriptionProduct(String descriptionProduct) {
-		this.descriptionProduct = descriptionProduct;
-	}
-
-	public Double getPriceProduct() {
-		return priceProduct;
-	}
-
-	public void setPriceProduct(Double priceProduct) {
-		this.priceProduct = priceProduct;
-	}
-
-	public Category getCategory() {
-		return category;
-	}
-
-	public void setCategory(Category category) {
-		this.category = category;
-	}
-
-	public List<OrderDetail> getOrderDetails() {
-		return orderDetails;
-	}
-
-	public void setOrderDetails(List<OrderDetail> orderDetails) {
-		this.orderDetails = orderDetails;
-	}
-
-	
-    
 }

@@ -19,11 +19,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.anderson.tiendaback.Mapper;
 import com.anderson.tiendaback.exception.ResourceNotFoundException;
 import com.anderson.tiendaback.models.OrderDetail;
 import com.anderson.tiendaback.services.OrderDetailService;
-import com.anderson.tiendaback.viewModels.OrderDetailViewModel;
+import com.anderson.tiendaback.dto.OrderDetailDTO;
 
 import jakarta.validation.ValidationException;
 
@@ -55,7 +54,7 @@ public class OrderDetailController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<OrderDetail>createOrderDetail(@RequestBody OrderDetailViewModel orderDetailViewModel, BindingResult bindingResult){
+	public ResponseEntity<OrderDetail>createOrderDetail(@RequestBody OrderDetailDTO orderDetailViewModel, BindingResult bindingResult){
 		if(bindingResult.hasErrors()) {
 			throw new ValidationException();
 		}
@@ -64,7 +63,7 @@ public class OrderDetailController {
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<OrderDetail>updateOrderDetail(@PathVariable UUID id,@RequestBody OrderDetailViewModel orderDetailViewModel){
+	public ResponseEntity<OrderDetail>updateOrderDetail(@PathVariable UUID id,@RequestBody OrderDetailDTO orderDetailViewModel){
 		if(!orderDetailService.getOne(id).isPresent()) {
         	new ResourceNotFoundException("OrderDetail not found with id " + id);
 		}

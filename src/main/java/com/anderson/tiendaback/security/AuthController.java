@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.anderson.tiendaback.models.User;
 import com.anderson.tiendaback.repositories.UserRepository;
-import com.anderson.tiendaback.viewModels.UserViewModel;
 
 @RestController
 @RequestMapping("/api/auth")

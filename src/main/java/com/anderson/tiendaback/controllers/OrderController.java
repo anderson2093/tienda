@@ -19,11 +19,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.anderson.tiendaback.Mapper;
 import com.anderson.tiendaback.exception.ResourceNotFoundException;
 import com.anderson.tiendaback.models.Order;
 import com.anderson.tiendaback.services.OrderService;
-import com.anderson.tiendaback.viewModels.OrderViewModel;
+import com.anderson.tiendaback.dto.OrderDTO;
 
 import jakarta.validation.ValidationException;
 
@@ -54,7 +53,7 @@ public class OrderController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<Order>createOrder(@RequestBody OrderViewModel orderViewModel, BindingResult bindingResult){
+	public ResponseEntity<Order>createOrder(@RequestBody OrderDTO orderViewModel, BindingResult bindingResult){
 		if(bindingResult.hasErrors()) {
 			throw new ValidationException();
 		}
@@ -63,7 +62,7 @@ public class OrderController {
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<Order>updateOrder(@PathVariable UUID id,@RequestBody OrderViewModel orderViewModel){
+	public ResponseEntity<Order>updateOrder(@PathVariable UUID id,@RequestBody OrderDTO orderViewModel){
 		if(!orderService.getOne(id).isPresent()) {
         	new ResourceNotFoundException("Order not found with id " + id);
 		}

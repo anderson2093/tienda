@@ -19,11 +19,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.anderson.tiendaback.Mapper;
 import com.anderson.tiendaback.exception.ResourceNotFoundException;
 import com.anderson.tiendaback.models.Category;
 import com.anderson.tiendaback.services.CategoryService;
-import com.anderson.tiendaback.viewModels.CategoryViewModel;
+import com.anderson.tiendaback.dto.CategoryDTO;
 
 import jakarta.validation.ValidationException;
 
@@ -55,7 +54,7 @@ public class CategoryController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<Category>createCategory(@RequestBody CategoryViewModel categoryViewModel, BindingResult bindingResult){
+	public ResponseEntity<Category>createCategory(@RequestBody CategoryDTO categoryViewModel, BindingResult bindingResult){
 		if(bindingResult.hasErrors()) {
 			throw new ValidationException();
 		}
@@ -64,7 +63,7 @@ public class CategoryController {
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<Category>updateCategory(@PathVariable UUID id,@RequestBody CategoryViewModel categoryViewModel){
+	public ResponseEntity<Category>updateCategory(@PathVariable UUID id,@RequestBody CategoryDTO categoryViewModel){
 		if(!categoryService.getOne(id).isPresent()) {
         	new ResourceNotFoundException("Category not found with id " + id);
 		}

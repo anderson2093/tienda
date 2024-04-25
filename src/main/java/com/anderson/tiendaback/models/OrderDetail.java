@@ -10,7 +10,15 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "order-details")
 public class OrderDetail {
@@ -31,59 +39,5 @@ public class OrderDetail {
     
     private Double price;
 
-	public OrderDetail() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-
-	public OrderDetail(UUID orderDetailId, Order order, Product product, Integer quantity, Double price) {
-		super();
-		this.orderDetailId = orderDetailId;
-		this.order = order;
-		this.product = product;
-		this.quantity = quantity;
-		this.price = price;
-	}
-
-	public UUID getOrderDetailId() {
-		return orderDetailId;
-	}
-
-	public void setOrderDetailId(UUID orderDetailId) {
-		this.orderDetailId = orderDetailId;
-	}
-
-	public Order getOrder() {
-		return order;
-	}
-
-	public void setOrder(Order order) {
-		this.order = order;
-	}
-
-	public Product getProduct() {
-		return product;
-	}
-
-	public void setProduct(Product product) {
-		this.product = product;
-	}
-
-	public Integer getQuantity() {
-		return quantity;
-	}
-
-	public void setQuantity(Integer quantity) {
-		this.quantity = quantity;
-	}
-
-	public Double getPrice() {
-		return price;
-	}
-
-	public void setPrice(Double price) {
-		this.price = price;
-	}
-    
     
 }

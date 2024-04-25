@@ -19,11 +19,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.anderson.tiendaback.Mapper;
 import com.anderson.tiendaback.exception.ResourceNotFoundException;
 import com.anderson.tiendaback.models.Payment;
 import com.anderson.tiendaback.services.PaymentService;
-import com.anderson.tiendaback.viewModels.PaymentViewModel;
+import com.anderson.tiendaback.dto.PaymentDTO;
 
 import jakarta.validation.ValidationException;
 
@@ -55,7 +54,7 @@ public class PaymentController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<Payment>createPayment(@RequestBody PaymentViewModel paymentViewModel, BindingResult bindingResult){
+	public ResponseEntity<Payment>createPayment(@RequestBody PaymentDTO paymentViewModel, BindingResult bindingResult){
 		if(bindingResult.hasErrors()) {
 			throw new ValidationException();
 		}
@@ -64,7 +63,7 @@ public class PaymentController {
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<Payment>updatePayment(@PathVariable UUID id,@RequestBody PaymentViewModel paymentViewModel){
+	public ResponseEntity<Payment>updatePayment(@PathVariable UUID id,@RequestBody PaymentDTO paymentViewModel){
 		if(!paymentService.getOne(id).isPresent()) {
         	new ResourceNotFoundException("Payment not found with id " + id);
 		}
