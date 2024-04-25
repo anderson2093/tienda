@@ -1,30 +1,28 @@
 package com.anderson.tiendaback.controllers;
 
+
+import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
+
+import com.anderson.tiendaback.dto.OrderListProductDTO;
+import com.anderson.tiendaback.exception.ModelNotFoundException;
+import com.anderson.tiendaback.models.Product;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import com.anderson.tiendaback.exception.ResourceNotFoundException;
 import com.anderson.tiendaback.models.Order;
 import com.anderson.tiendaback.services.OrderService;
 import com.anderson.tiendaback.dto.OrderDTO;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import jakarta.validation.ValidationException;
+import static org.springframework.http.HttpStatus.NO_CONTENT;
+import static org.springframework.http.HttpStatus.OK;
+
 
 @RestController
 @RequestMapping("/api/orders")
@@ -33,48 +31,43 @@ public class OrderController {
 	private OrderService orderService;
 	
 	@Autowired
-	private Mapper mapper;
-	
-	@GetMapping(params = {"page","size","sortDir","sort"})
-	public ResponseEntity<List<Order>> getOrder(@RequestParam("page")int page,@RequestParam("size")int size,@RequestParam("sortDir")String sortDir,@RequestParam("sort")String sort){
-		List<Order> orders = orderService.getAll(page, size, sortDir, sort).stream().map(order->{
-			return order;
-		}).collect(Collectors.toList());
-		return new ResponseEntity<List<Order>>(orders,HttpStatus.OK);
-	}
-	
+	private ModelMapper mapper;
+
 	@GetMapping("/{id}")
-	public ResponseEntity<Order>getOrderById(@PathVariable UUID id){
-		Optional<Order> order = orderService.getOne(id);
-		if(!order.isPresent()) {
-			new ResourceNotFoundException("Id "+id+ "is not existed");
+	public ResponseEntity<OrderDTO> findById(@PathVariable("id") UUID id) {
+		Order obj = orderService.findById(id);
+		if (obj == null) {
+			throw new ModelNotFoundException("ID NOT FOUND: " + id);
+		} else {
+			return new ResponseEntity<>(mapper.map(obj, OrderDTO.class), OK);
 		}
-		return ResponseEntity.ok(order.get());
 	}
-	
+
 	@PostMapping
-	public ResponseEntity<Order>createOrder(@RequestBody OrderDTO orderViewModel, BindingResult bindingResult){
-		if(bindingResult.hasErrors()) {
-			throw new ValidationException();
-		}
-		Order order = this.mapper.convertToOrderEntity(orderViewModel);
-		return new ResponseEntity<>(orderService.insertOrUpdate(order),HttpStatus.CREATED);
+	public ResponseEntity<Void> save(@RequestBody OrderListProductDTO dto) {
+		Order cons = mapper.map(dto.getOrder(), Order.class);
+		List<Product> products = mapper.map(dto.getLstProduct(), new TypeToken<List<Product>>() {
+		}.getType());
+
+		Order obj = orderService.saveTransactional(cons, products);
+		//localhost:8080/consults/5
+		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getOrderId()).toUri();
+		return ResponseEntity.created(location).build();
 	}
-	
-	@PutMapping("/{id}")
-	public ResponseEntity<Order>updateOrder(@PathVariable UUID id,@RequestBody OrderDTO orderViewModel){
-		if(!orderService.getOne(id).isPresent()) {
-        	new ResourceNotFoundException("Order not found with id " + id);
-		}
-		Order order = this.mapper.convertToOrderEntity(orderViewModel);
-		return  ResponseEntity.ok(orderService.insertOrUpdate(order));
+
+	@PutMapping
+	public ResponseEntity<Order> update(@RequestBody OrderDTO dto) {
+		Order obj = orderService.update(mapper.map(dto, Order.class));
+		return new ResponseEntity<>(obj, OK);
 	}
-	
+
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?>deleteOrder(@PathVariable UUID id){
-		return orderService.getOne(id).map(fabric -> {
-			orderService.delete(id);
-			return ResponseEntity.ok().build();
-		}).orElseThrow(() -> new ResourceNotFoundException("Order not found with id " + id));
+	public ResponseEntity<Void> delete(@PathVariable("id") UUID id) {
+		Order obj = orderService.findById(id);
+		if (obj == null) {
+			throw new ModelNotFoundException("ID NOT FOUND: " + id);
+		}
+		orderService.delete(id);
+		return new ResponseEntity<>(NO_CONTENT);
 	}
 }

@@ -1,14 +1,16 @@
 package com.anderson.tiendaback.controllers;
 
+import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import com.anderson.tiendaback.dto.PaymentDTO;
+import com.anderson.tiendaback.exception.ModelNotFoundException;
+import com.anderson.tiendaback.models.Payment;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,15 +18,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.anderson.tiendaback.exception.ResourceNotFoundException;
-import com.anderson.tiendaback.models.Payment;
-import com.anderson.tiendaback.services.PaymentService;
-import com.anderson.tiendaback.dto.PaymentDTO;
 
-import jakarta.validation.ValidationException;
+import com.anderson.tiendaback.services.PaymentService;
+
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import static org.springframework.http.HttpStatus.NO_CONTENT;
+import static org.springframework.http.HttpStatus.OK;
 
 @RestController
 @RequestMapping("/api/payments")
@@ -34,48 +36,46 @@ public class PaymentController {
 	private PaymentService paymentService;
 	
 	@Autowired
-	private Mapper mapper;
-	
-	@GetMapping(params = {"page","size","sortDir","sort"})
-	public ResponseEntity<List<Payment>> getPayment(@RequestParam("page")int page,@RequestParam("size")int size,@RequestParam("sortDir")String sortDir,@RequestParam("sort")String sort){
-		List<Payment> payments = paymentService.getAll(page, size, sortDir, sort).stream().map(payment->{
-			return payment;
-		}).collect(Collectors.toList());
-		return new ResponseEntity<List<Payment>>(payments,HttpStatus.OK);
+	private ModelMapper mapper;
+	@GetMapping
+	public ResponseEntity<List<PaymentDTO>> findAll() {
+		List<PaymentDTO> list = paymentService.findAll().stream().map(p -> mapper.map(p, PaymentDTO.class)).collect(Collectors.toList());
+
+		return new ResponseEntity<>(list, OK);
 	}
-	
+
 	@GetMapping("/{id}")
-	public ResponseEntity<Payment>getPaymentById(@PathVariable UUID id){
-		Optional<Payment> payment = paymentService.getOne(id);
-		if(!payment.isPresent()) {
-			new ResourceNotFoundException("Id "+id+ "is not existed");
+	public ResponseEntity<PaymentDTO> findById(@PathVariable("id") UUID id) {
+		Payment obj = paymentService.findById(id);
+		if (obj == null) {
+			throw new ModelNotFoundException("ID NOT FOUND: " + id);
+		} else {
+			return new ResponseEntity<>(mapper.map(obj, PaymentDTO.class), OK);
 		}
-		return ResponseEntity.ok(payment.get());
 	}
-	
+
+
 	@PostMapping
-	public ResponseEntity<Payment>createPayment(@RequestBody PaymentDTO paymentViewModel, BindingResult bindingResult){
-		if(bindingResult.hasErrors()) {
-			throw new ValidationException();
-		}
-		Payment payment = this.mapper.convertToPaymentEntity(paymentViewModel);
-		return new ResponseEntity<>(paymentService.insertOrUpdate(payment),HttpStatus.CREATED);
+	public ResponseEntity<Void> save(@RequestBody PaymentDTO dto){
+		Payment obj = paymentService.save(mapper.map(dto, Payment.class));
+		//localhost:8080/payment/5
+		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getPaymentId()).toUri();
+		return ResponseEntity.created(location).build();
 	}
-	
-	@PutMapping("/{id}")
-	public ResponseEntity<Payment>updatePayment(@PathVariable UUID id,@RequestBody PaymentDTO paymentViewModel){
-		if(!paymentService.getOne(id).isPresent()) {
-        	new ResourceNotFoundException("Payment not found with id " + id);
-		}
-		Payment payment = this.mapper.convertToPaymentEntity(paymentViewModel);
-		return  ResponseEntity.ok(paymentService.insertOrUpdate(payment));
+
+	@PutMapping
+	public ResponseEntity<Payment> update(@RequestBody PaymentDTO dto) {
+		Payment obj = paymentService.update(mapper.map(dto, Payment.class));
+		return new ResponseEntity<>(obj, OK);
 	}
-	
+
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?>deletePayment(@PathVariable UUID id){
-		return paymentService.getOne(id).map(fabric -> {
-			paymentService.delete(id);
-			return ResponseEntity.ok().build();
-		}).orElseThrow(() -> new ResourceNotFoundException("Payment not found with id " + id));
+	public ResponseEntity<Void> delete(@PathVariable("id") UUID id) {
+		Payment obj = paymentService.findById(id);
+		if (obj == null) {
+			throw new ModelNotFoundException("ID NOT FOUND: " + id);
+		}
+		paymentService.delete(id);
+		return new ResponseEntity<>(NO_CONTENT);
 	}
 }
